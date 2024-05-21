@@ -12,7 +12,7 @@ public class CreateProductEndpoint : ICarterModule
             var command = request.Adapt<CreateProductCommand>();
             var result = await sender.Send(command);
             var response = result.Adapt<CreateProductResponse>();
-            return Results.Created($"products/{result.id}", response);
+            return Results.Created($"products/{response}", response);
         })
             .WithName("CreateProduct")
             .Produces<CreateProductResponse>(StatusCodes.Status201Created)
