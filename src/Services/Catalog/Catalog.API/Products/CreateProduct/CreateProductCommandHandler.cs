@@ -1,4 +1,6 @@
-﻿namespace Catalog.API.Products.CreateProduct;
+﻿using System.Reflection.Metadata;
+
+namespace Catalog.API.Products.CreateProduct;
 
 public record CreateProductCommand(string Name, List<string> Categories, string Description, string ImageFile, decimal Price):ICommand<CreateProductResult>;
 public record CreateProductResult(Guid Id);
@@ -14,16 +16,21 @@ public class CreateProductValidator : AbstractValidator<CreateProductCommand>
     }
 }
 
-internal class CreateProductCommandHandler(IDocumentSession _session, IValidator<CreateProductCommand> _validator) : ICommandHandler<CreateProductCommand, CreateProductResult>
+internal class CreateProductCommandHandler(IDocumentSession _session,
+    //? Removed the validator since it was applied on the Behaviors Pipline of MediatR....
+    //IValidator<CreateProductCommand> _validator,
+    ILogger<CreateProductCommandHandler> logger) : ICommandHandler<CreateProductCommand, CreateProductResult>
 {
     async Task<CreateProductResult> IRequestHandler<CreateProductCommand, CreateProductResult>.Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
-        var valResult = _validator.Validate(command);
+        //var valResult = _validator.Validate(command);
 
-        if(valResult.Errors.Any())
-        {
-            throw new ValidationException(valResult.Errors.FirstOrDefault()!.ErrorMessage);
-        }
+        //if(valResult.Errors.Any())
+        //{
+        //    throw new ValidationException(valResult.Errors.FirstOrDefault()!.ErrorMessage);
+        //}
+
+        logger.LogInformation("CreateProductCommandHandler.Handle called with {@command}", command);
 
         var product = new Product
         {
