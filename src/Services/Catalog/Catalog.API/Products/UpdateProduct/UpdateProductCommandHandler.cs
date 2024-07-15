@@ -26,7 +26,7 @@ public class UpdateProductCommandHandler(IDocumentSession _dbSession, ILogger<Up
         _logger.LogInformation("UpdateProductCommandHandler.Handle called with @{Command}", command);
         var product = await _dbSession.LoadAsync<Product>(command.Id);
         if (product is null)
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException(command.Id);
 
         product.Name = command.Name;
         product.Description = command.Description;
