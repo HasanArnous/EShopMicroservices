@@ -1,5 +1,6 @@
 using BuildingBlocks.Behaviors;
 using BuildingBlocks.Exceptions.Handler;
+using Catalog.API.Data;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +23,12 @@ builder.Services.AddMediatR(config =>
 builder.Services.AddMarten(options =>
 {
     options.Connection(builder.Configuration.GetConnectionString("CatalogDb")!);
-}).UseLightweightSessions();
+}).UseLightweightSessions()
+//.InitializeWith<CatalogInitialData>()
+;
+// Initialize Marten DB from the Services directly where there is a condition
+if(builder.Environment.IsDevelopment())
+    builder.Services.InitializeMartenWith<CatalogInitialData>();
 
 // Add FluentValidation, Check the assembly for any class that use the AbstractValidator...
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
