@@ -16,22 +16,11 @@ public class CreateProductValidator : AbstractValidator<CreateProductCommand>
     }
 }
 
-internal class CreateProductCommandHandler(IDocumentSession _session,
-    //? Removed the validator since it was applied on the Behaviors Pipline of MediatR....
-    //IValidator<CreateProductCommand> _validator,
-    ILogger<CreateProductCommandHandler> logger) : ICommandHandler<CreateProductCommand, CreateProductResult>
+internal class CreateProductCommandHandler(IDocumentSession _session) 
+    : ICommandHandler<CreateProductCommand, CreateProductResult>
 {
     async Task<CreateProductResult> IRequestHandler<CreateProductCommand, CreateProductResult>.Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
-        //var valResult = _validator.Validate(command);
-
-        //if(valResult.Errors.Any())
-        //{
-        //    throw new ValidationException(valResult.Errors.FirstOrDefault()!.ErrorMessage);
-        //}
-
-        logger.LogInformation("CreateProductCommandHandler.Handle called with {@command}", command);
-
         var product = new Product
         {
             Name = command.Name,
@@ -41,8 +30,6 @@ internal class CreateProductCommandHandler(IDocumentSession _session,
             Price = command.Price
         };
 
-        // TODO:
-        // Save to database
         _session.Store(product);
         await _session.SaveChangesAsync(cancellationToken);
 

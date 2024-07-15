@@ -14,6 +14,8 @@ builder.Services.AddMediatR(config =>
     config.RegisterServicesFromAssemblies(typeof(Program).Assembly);
     // Register all Validation Behaviors as generic type...
     config.AddOpenBehavior(typeof(ValidationBehavior<,>));
+    // Register the Logger Behavior
+    config.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
 
 // Add and Configure Marten 
