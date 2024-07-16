@@ -1,5 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(typeof(Program).Assembly);
@@ -9,7 +11,8 @@ builder.Services.AddMediatR(config =>
 
 builder.Services.AddMarten(options =>
 {
-    options.Connection(builder.Configuration.GetConnectionString("BasketDb")!);
+    string cs = builder.Configuration.GetConnectionString("BasketDb")!;
+    options.Connection(cs);
     options.Schema.For<ShoppingCart>().Identity(sc => sc.Username);
 }).UseLightweightSessions();
 

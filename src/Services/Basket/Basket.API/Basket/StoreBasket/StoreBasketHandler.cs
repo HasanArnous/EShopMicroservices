@@ -12,15 +12,15 @@ public class StoreBasketCommandValidator : AbstractValidator<StoreBasketCommand>
     }
 }
 
-public class StoreBasketCommandHandler : ICommandHandler<StoreBasketCommand, StoreBasketResult>
+public class StoreBasketCommandHandler(IBasketRepository repo) : ICommandHandler<StoreBasketCommand, StoreBasketResult>
 {
     public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
     {
         var cart = command.ShoppingCart;
         ////TODO:
-        /// Store/Update the basket in the database
         /// Store/Update the basket in the cache
 
-        return new StoreBasketResult("Hasan"); 
+        var basket = await repo.StoreBasket(command.ShoppingCart);
+        return new StoreBasketResult(basket.Username); 
     }
 }
