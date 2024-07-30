@@ -47,3 +47,20 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  basket.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__BasketDb=Server=basketDb;Port=5432;Database=BasketDb;User ID=postgres;Password=postgres;Pooling=true;Include Error Detail=true
+      - ConnectionStrings__Redis=distributedCache:6379
+    ports:
+      - "6001:8080"
+      - "6061:8081"
+    depends_on:
+      - basketDb
+      - distributedCache
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
