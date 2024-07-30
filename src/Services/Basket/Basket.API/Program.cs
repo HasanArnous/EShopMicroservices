@@ -1,4 +1,5 @@
 using BuildingBlocks.Exceptions.Handler;
+using HealthChecks.UI.Client;
 using Microsoft.Extensions.Caching.Distributed;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,11 +34,19 @@ builder.Services.AddMarten(options =>
 
 builder.Services.AddCarter();
 
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("BasketDb")!)
+    .AddRedis(builder.Configuration.GetConnectionString("Redis")!);
+
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 var app = builder.Build();
 
 app.UseExceptionHandler(options => { });
+
+app.MapHealthChecks("/Health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions {
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.MapCarter();
 
