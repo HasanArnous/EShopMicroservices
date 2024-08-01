@@ -1,0 +1,47 @@
+// Specify the syntax version for the ProtoBuff compiler
+syntax = "proto3"; 
+
+// This is optional, and it tells the compiler to create the corresponding Stub-Classes with this namespace
+option csharp_namespace = "Discount.gRPC"; 
+
+// The Package name
+package discount;
+
+// The Discount service definition (methods)  
+service DiscountProtoService{
+	// This is the pattern used to create the services definition
+//  rpc [Method_Name] ([RequestMessageModel]) returns ([ResponseMessageModel]);
+	rpc GetDiscount (GetDiscountRequest) returns (CouponModel);
+	rpc CreateDiscount (CreateDiscountRequest) returns (CouponModel);
+	rpc UpdateDiscount (UpdateDiscountRequest) returns (CouponModel);
+	rpc DeleteDiscount (DeleteDiscountRequest) returns (DeleteDiscountResponse);
+}
+
+// All below is how to define the message classes in the ProtoBuff files
+message GetDiscountRequest{
+	string prodcuntId = 1;
+}
+
+message CreateDiscountRequest{
+	CouponModel coupon = 1;
+}
+
+message UpdateDiscountRequest{
+	CouponModel coupon = 1;
+}
+
+message DeleteDiscountRequest{
+	string prodcutId = 1;
+}
+
+message CouponModel{
+	int32 id = 1;
+	string productId = 2;
+	string description = 3;
+	double amount = 4;
+}
+
+message DeleteDiscountResponse{
+	bool isSuccess = 1;
+}
+
