@@ -396,3 +396,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+
+
+# SQLite Database Files
+/src/Services/Discount/Discount.gRPC/discountDb
+/src/Services/Discount/Discount.gRPC/discountDb-shm
+/src/Services/Discount/Discount.gRPC/discountDb-wal

@@ -12,7 +12,7 @@ public class DiscountService
 {
 	public override async Task<CouponModel> GetDiscount(GetDiscountRequest request, ServerCallContext context)
 	{
-		if(Guid.TryParse(request.ProductId, out Guid productId))
+		if(!Guid.TryParse(request.ProductId, out Guid productId))
 			throw new RpcException(status: new Status(StatusCode.InvalidArgument, "Invalid Product ID"));
 		var coupon = await db.Coupones.FirstOrDefaultAsync(c => c.ProductId == productId);
 		if(coupon == null) 
@@ -51,7 +51,7 @@ public class DiscountService
 
 	public async override Task<DeleteDiscountResponse> DeleteDiscount(DeleteDiscountRequest request, ServerCallContext context)
 	{
-		if(Guid.TryParse(request.ProductId, out Guid productId))
+		if(!Guid.TryParse(request.ProductId, out Guid productId))
 			throw new RpcException(status: new Status(StatusCode.InvalidArgument, "Invalid Product ID"));
 		var coupon = await db.Coupones.FirstOrDefaultAsync(c => c.ProductId == productId);
 		if (coupon == null)
