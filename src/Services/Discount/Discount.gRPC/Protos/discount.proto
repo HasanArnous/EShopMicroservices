@@ -19,7 +19,7 @@ service DiscountProtoService{
 
 // All below is how to define the message classes in the ProtoBuff files
 message GetDiscountRequest{
-	string prodcuntId = 1;
+	string productId = 1;
 }
 
 message CreateDiscountRequest{
@@ -31,7 +31,7 @@ message UpdateDiscountRequest{
 }
 
 message DeleteDiscountRequest{
-	string prodcutId = 1;
+	string productId = 1;
 }
 
 message CouponModel{
