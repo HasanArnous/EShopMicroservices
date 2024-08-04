@@ -1,8 +1,8 @@
-﻿using Discount.gRPC.Data;
+﻿using Microsoft.EntityFrameworkCore;
 using Discount.gRPC.Models;
+using Discount.gRPC.Data;
 using Grpc.Core;
 using Mapster;
-using Microsoft.EntityFrameworkCore;
 
 namespace Discount.gRPC.Services;
 
@@ -14,10 +14,10 @@ public class DiscountService
 	{
 		if(!Guid.TryParse(request.ProductId, out Guid productId))
 			throw new RpcException(status: new Status(StatusCode.InvalidArgument, "Invalid Product ID"));
-		var coupon = await db.Coupones.FirstOrDefaultAsync(c => c.ProductId == productId);
+		var coupon = await db.Coupons.FirstOrDefaultAsync(c => c.ProductId == productId);
 		if(coupon == null) 
-			coupon = new Coupon {Id = -1, ProductId = productId, Description = "No Coupone for this Product!", Amount = 0 };
-		logger.LogInformation("Coupone for {ProductId}, Amount: {CuoponAmount}", request.ProductId, coupon.Amount);
+			coupon = new Coupon {Id = -1, ProductId = productId, Description = "No Coupon for this Product!", Amount = 0 };
+		logger.LogInformation("Coupon for {ProductId}, Amount: {CuoponAmount}", request.ProductId, coupon.Amount);
 		var couponModel = coupon.Adapt<CouponModel>();
 		return couponModel;
 	}
@@ -26,8 +26,8 @@ public class DiscountService
 	{
 		var coupon = request.Coupon.Adapt<Coupon>();
 		if (coupon == null)
-			throw new RpcException(status: new Status(StatusCode.InvalidArgument, "Invalid Coupon detials"));
-		db.Coupones.Add(coupon);
+			throw new RpcException(status: new Status(StatusCode.InvalidArgument, "Invalid Coupon details"));
+		db.Coupons.Add(coupon);
 		await db.SaveChangesAsync();
 		logger.LogInformation("Coupons - Create - Success - Coupon Id: {CouponId}, ProductId: {ProductId}", coupon.Id, coupon.ProductId);
 		return coupon.Adapt<CouponModel>();
@@ -37,13 +37,13 @@ public class DiscountService
 	{
 		var coupon = request.Coupon.Adapt<Coupon>();
 		if (coupon == null)
-			throw new RpcException(status: new Status(StatusCode.InvalidArgument, "Invalid Coupon detials"));
-		if (await db.Coupones.CountAsync(c => c.Id == request.Coupon.Id) == 0)
+			throw new RpcException(status: new Status(StatusCode.InvalidArgument, "Invalid Coupon details"));
+		if (await db.Coupons.CountAsync(c => c.Id == request.Coupon.Id) == 0)
 		{
-			logger.LogWarning("Coupones - Update - NOT FOUND - Coupone Id: {CouponId}", request.Coupon.Id);
+			logger.LogWarning("Coupons - Update - NOT FOUND - Coupon Id: {CouponId}", request.Coupon.Id);
 			throw new RpcException(new Status(StatusCode.NotFound, "No Discount Found!"));
 		}
-		db.Coupones.Update(coupon);
+		db.Coupons.Update(coupon);
 		await db.SaveChangesAsync();
 		logger.LogInformation("Coupons - Update - Success - Coupon Id: {CouponId}, ProductId: {ProductId}", coupon.Id, coupon.ProductId);
 		return coupon.Adapt<CouponModel>();
@@ -53,13 +53,13 @@ public class DiscountService
 	{
 		if(!Guid.TryParse(request.ProductId, out Guid productId))
 			throw new RpcException(status: new Status(StatusCode.InvalidArgument, "Invalid Product ID"));
-		var coupon = await db.Coupones.FirstOrDefaultAsync(c => c.ProductId == productId);
+		var coupon = await db.Coupons.FirstOrDefaultAsync(c => c.ProductId == productId);
 		if (coupon == null)
 		{
-			logger.LogWarning("Coupones - DELETE - NOT FOUND - Coupone Id: {CouponId}", productId);
+			logger.LogWarning("Coupons - DELETE - NOT FOUND - Coupon Id: {CouponId}", productId);
 			throw new RpcException(new Status(StatusCode.NotFound, "No Discount Found!"));
 		}
-		db.Coupones.Remove(coupon);
+		db.Coupons.Remove(coupon);
 		await db.SaveChangesAsync();
 		return new DeleteDiscountResponse { IsSuccess = true };
 	}
