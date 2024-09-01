@@ -11,6 +11,9 @@ services:
   distributedCache:
     image: redis
 
+  orderDb:
+    image: mcr.microsoft.com/mssql/server
+
 
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi

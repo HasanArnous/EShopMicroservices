@@ -11,6 +11,12 @@ public static class DependencyInjection
         // Register the Services into the IoC container...
         var connectionString = configuration.GetConnectionString("OrderingDb");
 
+        // Registering the DbContext
+        services.AddDbContext<ApplicationDbContext>(options =>
+        {
+            options.UseSqlServer(connectionString);
+        });
+
         return services;
     }
 }
