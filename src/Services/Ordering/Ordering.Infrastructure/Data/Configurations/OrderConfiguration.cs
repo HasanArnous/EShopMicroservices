@@ -14,8 +14,10 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         );
 
         builder.HasOne<Customer>().WithMany().HasForeignKey(o => o.CustomerId).IsRequired();
-
-        builder.HasMany<OrderItem>()
+        
+        // Proper mapping instead of doing like this
+        //! builder.HasMany<OrderItem>()
+        builder.HasMany(o => o.OrderItems)
             .WithOne()
             .HasForeignKey(oi => oi.OrderId);
         builder.ComplexProperty(o => o.OrderName, nameBuilder =>
@@ -43,12 +45,12 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             shippingBuilder.Property(s => s.ZipCode).HasMaxLength(5).IsRequired();
             shippingBuilder.Property(s => s.State).HasMaxLength(50);
             shippingBuilder.Property(s => s.Country).HasMaxLength(50);
-            shippingBuilder.Property(s => s.EmailAddress).HasMaxLength(50)
+            shippingBuilder.Property(s => s.EmailAddress).HasMaxLength(50);
         });
         builder.ComplexProperty(o => o.Payment, paymentBuilder =>
         {
             paymentBuilder.Property(p => p.CardNumber).HasMaxLength(24).IsRequired();
-            paymentBuilder.Property(p => p.ExpirationDate).HasMaxLength(10);
+            paymentBuilder.Property(p => p.Expiration).HasMaxLength(10);
             paymentBuilder.Property(p => p.CardName).HasMaxLength(50);
             paymentBuilder.Property(p => p.CVV).HasMaxLength(3);
             // Make sure that the PaymentMethod is mapped into a column...
