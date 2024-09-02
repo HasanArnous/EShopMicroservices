@@ -10,7 +10,7 @@ public static class DatabaseExtensions
         using var scope = app.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await dbContext.Database.MigrateAsync();
-        dbContext.Database.MigrateAsync().GetAwaiter().GetResult();
+        //dbContext.Database.MigrateAsync().GetAwaiter().GetResult();
         await SeedAsync(dbContext);
     }
 
