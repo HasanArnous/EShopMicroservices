@@ -1,2 +1,9 @@
-﻿global using Ordering.Core.Domain.Enums;
+﻿global using Ordering.Core.Application.Exceptions;
+global using Ordering.Core.Domain.ValueObjects;
 global using Ordering.Core.Application.DTOs;
+global using Ordering.Core.Application.Data;
+global using Ordering.Core.Domain.Models;
+global using Ordering.Core.Domain.Enums;
+global using BuildingBlocks.Exceptions;
+global using BuildingBlocks.CQRS;
+global using FluentValidation;
