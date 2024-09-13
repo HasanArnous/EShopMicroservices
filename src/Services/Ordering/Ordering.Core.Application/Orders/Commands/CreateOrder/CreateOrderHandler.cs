@@ -40,7 +40,7 @@ public class CreateOrderHandler(IApplicationDbContext _dbContext) : ICommandHand
                 dto.Payment.PaymentMethod));
 
         foreach (var item in dto.OrderItems)
-            order.AddItem(ProductId.Of(item.ProductId), item.Quntity, item.Price);
+            order.AddItem(ProductId.Of(item.ProductId), item.Quantity, item.Price);
 
         return order;
     }
