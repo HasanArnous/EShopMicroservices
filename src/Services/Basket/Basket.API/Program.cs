@@ -1,3 +1,4 @@
+using BuildingBlocks.Messaging.MassTransit;
 using BuildingBlocks.Exceptions.Handler;
 using Discount.gRPC;
 using HealthChecks.UI.Client;
@@ -48,6 +49,11 @@ builder.Services.AddMarten(options =>
 }).UseLightweightSessions();
 
 builder.Services.AddCarter();
+
+// Message Broker Configuration
+//? The method has a second optional parameter (Assembly), which is null by default
+//? We won't pass any argument since this API will act as a publisher and has no consumer to register
+builder.Services.AddMessageBroker(builder.Configuration);
 
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("BasketDb")!)
