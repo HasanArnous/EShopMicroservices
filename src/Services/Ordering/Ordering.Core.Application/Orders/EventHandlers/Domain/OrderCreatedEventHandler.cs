@@ -1,8 +1,9 @@
-﻿using Microsoft.FeatureManagement;
+﻿using MassTransit;
+using Microsoft.FeatureManagement;
 
 namespace Ordering.Core.Application.Orders.EventHandlers;
 
-public class OrderCreatedEventHandler(IPublisher publisher, IFeatureManager featureManager, ILogger<OrderCreatedEventHandler> logger) : INotificationHandler<OrderCreatedEvent>
+public class OrderCreatedEventHandler(IPublishEndpoint publisher, IFeatureManager featureManager, ILogger<OrderCreatedEventHandler> logger) : INotificationHandler<OrderCreatedEvent>
 {
 	public async Task Handle(OrderCreatedEvent domainEvent, CancellationToken cancellationToken)
 	{
