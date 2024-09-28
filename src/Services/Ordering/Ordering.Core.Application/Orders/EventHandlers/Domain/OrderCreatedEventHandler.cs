@@ -1,6 +1,8 @@
-﻿namespace Ordering.Core.Application.Orders.EventHandlers;
+﻿using Microsoft.FeatureManagement;
 
-public class OrderCreatedEventHandler(IPublisher publisher, ILogger<OrderCreatedEventHandler> logger) : INotificationHandler<OrderCreatedEvent>
+namespace Ordering.Core.Application.Orders.EventHandlers;
+
+public class OrderCreatedEventHandler(IPublisher publisher, IFeatureManager featureManager, ILogger<OrderCreatedEventHandler> logger) : INotificationHandler<OrderCreatedEvent>
 {
 	public async Task Handle(OrderCreatedEvent domainEvent, CancellationToken cancellationToken)
 	{
@@ -13,7 +15,10 @@ public class OrderCreatedEventHandler(IPublisher publisher, ILogger<OrderCreated
 		// as the same of what we did in the BasketCheckoutEvent so when we add a consumer class
 		// we can specify the type of the event and get the details of the object?????
 		// Currently, we are publishing the OrderDTO object instead of a specific type for the integration event.....
-		var orderCreatedIntegrationEvent = domainEvent.order.ToDto();
-		await publisher.Publish(orderCreatedIntegrationEvent, cancellationToken);
+		if(await featureManager.IsEnabledAsync("OrderFullfilment")) // Check if the feature is on before execution...
+		{
+			var orderCreatedIntegrationEvent = domainEvent.order.ToDto();
+			await publisher.Publish(orderCreatedIntegrationEvent, cancellationToken);
+		}
 	}
 }
