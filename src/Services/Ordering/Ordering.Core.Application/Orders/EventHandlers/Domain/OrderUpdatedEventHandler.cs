@@ -1,5 +1,4 @@
-﻿
-namespace Ordering.Core.Application.Orders.EventHandlers;
+﻿namespace Ordering.Core.Application.Orders.EventHandlers.Domain;
 
 public class OrderUpdatedEventHandler(ILogger<OrderUpdatedEventHandler> logger) : INotificationHandler<OrderUpdatedEvent>
 {
