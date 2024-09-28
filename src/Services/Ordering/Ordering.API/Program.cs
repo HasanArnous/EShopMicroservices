@@ -6,7 +6,7 @@ using Ordering.Infrastructure.Data.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddApplicationServices() // This layer services is before the Infrastructure because we need to use mediator in the next layer....
+    .AddApplicationServices(builder.Configuration) // This layer services is before the Infrastructure because we need to use mediator in the next layer....
     .AddInfrastructureServices(builder.Configuration)
     .AddApiServices(builder.Configuration);
 
